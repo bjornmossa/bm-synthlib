@@ -1,7 +1,7 @@
 (
   name: "bm-synthlib",
   summary: "yet another Synthdef libriary",
-  version: "0.0.1",
+  version: "0.0.2",
   license: "GPL 3.0",
   copyright: "Bjornmossa 2020"
 )
