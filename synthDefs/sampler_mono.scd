@@ -7,3 +7,19 @@ SynthDef(\mono_sampler, {
   sig = Pan2.ar(sig, pan);
   Out.ar(out, (sig * env) * amp);
 }).add;
+
+Server.default.doWhenBooted({
+  var shakerSample = Buffer.read(
+	Server.default,
+	BmSynthLib.samplesPath+/+"shaker_synthetic_mono.wav"
+  );
+
+  PresetStorage.add(
+	"sampler shaker",
+	\mono_sampler,
+	[
+	  \bufn, shakerSample,
+	  \dur, 1
+	]
+  );
+});
