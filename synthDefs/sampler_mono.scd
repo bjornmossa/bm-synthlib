@@ -14,11 +14,25 @@ Server.default.doWhenBooted({
 	BmSynthLib.samplesPath+/+"shaker_synthetic_mono.wav"
   );
 
+  var snareSample = Buffer.read(
+	Server.default,
+	BmSynthLib.samplesPath+/+"cosmos_snare_mono.wav"
+  );
+
   PresetStorage.add(
 	"sampler shaker",
 	\mono_sampler,
 	[
 	  \bufn, shakerSample,
+	  \dur, 1
+	]
+  );
+
+  PresetStorage.add(
+	"sampler snare_csms",
+	\mono_sampler,
+	[
+	  \bufn, snareSample,
 	  \dur, 1
 	]
   );
