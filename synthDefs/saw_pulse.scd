@@ -4,7 +4,6 @@ SynthDef(\saw_pulse, {
   freq,
   amp = 1,
   pan = 0,
-  drift = 0.5,
   attack = 0.5,
   decay = 1,
   aCur = 0.5,
@@ -22,31 +21,39 @@ SynthDef(\saw_pulse, {
   lfoGain = 0
   |
   var saw, pulse, noise, ampEnv, filtered, sig;
+  var sawFreq, pulseFreq;
+
+  sawFreq = freq;
+  pulseFreq = freq * pulseDetune.midiratio;
 
   ampEnv = Env([0, amp, 0], [attack, decay], [aCur, dCur]).kr(2);
+  ampEnv = ampEnv * PinkNoise.ar(1!2).range(0.01, 1).lag(0.05);
 
   saw = LFSaw.ar(
-    freq + WhiteNoise.kr(drift),
-    sPhase
+	sawFreq,
+    sPhase,
+	0.5
   );
 
   pulse = LFPulse.ar(
-    (freq * pulseDetune.midiratio) +  WhiteNoise.kr(drift),
+	pulseFreq,
     pPhase,
-    0.5 + (SinOsc.kr(pwmFreq).range(-0.5, 0.5) * pwmGain)
+    0.5 + (SinOsc.kr(pwmFreq).range(-0.5, 0.5) * pwmGain),
+	0.5
   );
 
   noise = WhiteNoise.ar() * noiseGain;
 
   sig = (saw + pulse + noise) * ampEnv;
+  sig = HPF.ar(sig, min(sawFreq, pulseFreq));
 
   filtered = RLPF.ar(
     sig,
-    Env([60, cutoffFreq], [fAttack]).kr(0) * (1 - (SinOsc.kr(fLfo) * lfoGain)),
+    cutoffFreq * Env([0.01, 1], [fAttack]).kr(0) * (1 - (SinOsc.kr(fLfo) * lfoGain)),
     filtQ
   );
 
-  Out.ar(out, Pan2.ar(filtered * ampEnv, pan));
+  Out.ar(out, Splay.ar(filtered * ampEnv, pan));
 }).add;
 
 PresetStorage.add(
@@ -62,9 +69,7 @@ PresetStorage.add(
     \pwmGain, 0.2,
     \fAttack, 0.05,
     \attack, 0.01,
-    \noiseGain, 0.5,
-    \drift, 1,
-    \cutoffFreq, 400,
+    \noiseGain, 0.1
   ]
 );
 
@@ -72,7 +77,6 @@ PresetStorage.add(
   "saw_pulse pluck",
   \saw_pulse,
   [
-    \drift, 1,
     \attack, 0.01,
     \fAttack, 0.001,
     \decay, 0.3,
