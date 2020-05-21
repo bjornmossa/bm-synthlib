@@ -1,11 +1,8 @@
 BmSynthLib {
   classvar <samplesPath;
 
-  *initClass {
+  *init {
 	samplesPath = this.filenameSymbol.asString.dirname+/+"samples";
-
-	StartUp.add{
-      (this.filenameSymbol.asString.dirname+/+"synthDefs/*.scd").loadPaths;
-	}
+	(this.filenameSymbol.asString.dirname+/+"synthDefs/*.scd").loadPaths;
   }
 }
