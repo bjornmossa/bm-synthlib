@@ -49,7 +49,7 @@ SynthDef(\saw_pulse, {
 
   filtered = RLPF.ar(
     sig,
-    cutoffFreq * Env([0.01, 1], [fAttack]).kr(0) * (1 - (SinOsc.kr(fLfo) * lfoGain)),
+    cutoffFreq * Env([0.01, 1], [fAttack]).kr(0) * (1 - (LFSaw.kr(fLfo, mul: lfoGain).range(0, 1) )),
     filtQ
   );
 

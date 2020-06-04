@@ -19,6 +19,11 @@ Server.default.doWhenBooted({
 	BmSynthLib.samplesPath+/+"cosmos_snare_mono.wav"
   );
 
+  var idmClickSample = Buffer.read(
+	Server.default,
+	BmSynthLib.samplesPath+/+"idm_click.wav"
+  );
+
   PresetStorage.add(
 	"sampler shaker",
 	\mono_sampler,
@@ -33,6 +38,15 @@ Server.default.doWhenBooted({
 	\mono_sampler,
 	[
 	  \bufn, snareSample,
+	  \dur, 1
+	]
+  );
+
+  PresetStorage.add(
+	"sampler idm_click",
+	\mono_sampler,
+	[
+	  \bufn, idmClickSample,
 	  \dur, 1
 	]
   );

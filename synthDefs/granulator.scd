@@ -1,3 +1,8 @@
+var shakerSample = Buffer.read(
+  Server.default,
+  BmSynthLib.samplesPath+/+"shaker_synthetic_mono.wav"
+);
+
 SynthDef(\granulator, {
   |
   out = 0,
@@ -34,17 +39,10 @@ SynthDef(\granulator, {
 	) * env);
 }).add;
 
-Server.default.doWhenBooted({
-  var shakerSample = Buffer.read(
-	Server.default,
-	BmSynthLib.samplesPath+/+"shaker_synthetic_mono.wav"
-  );
-
-  PresetStorage.add(
-	"granular shaker",
-	\granulator,
-	[
-	  \bufn, shakerSample
-	]
-  );
-});
+PresetStorage.add(
+  "granular shaker",
+  \granulator,
+  [
+	\bufn, shakerSample
+  ]
+);
